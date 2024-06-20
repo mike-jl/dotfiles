@@ -93,11 +93,14 @@ vim.g.maplocalleader = " "
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+-- set cmdline to 0
+-- vim.o.cmdheight = 0
+
 -- [[ Setting options ]]
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
-
+-- vim.opt.laststatus = 3
 -- Make line numbers default
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
@@ -124,6 +127,7 @@ vim.opt.undofile = true
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
+vim.opt.incsearch = true
 
 -- Keep signcolumn on by default
 vim.opt.signcolumn = "yes"
@@ -154,8 +158,31 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+
+vim.opt.termguicolors = true
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
+--
+-- allow to move selected block in visual mode with J and K
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+
+-- keep search term in the middlde
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
+
+-- allow to paste without without changing the clipboard
+vim.keymap.set("x", "<Leader>p", '"_dP')
+-- use leader d to delete without changing the clipboard
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
+
+-- use leader y to yank to system clipboard
+vim.keymap.set({ "n", "v" }, "<leader>y", [["*y]])
+vim.keymap.set("n", "<leader>Y", [["*Y]])
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
@@ -189,6 +216,12 @@ vim.keymap.set("n", "<C-h>", "<C-w><C-h>", { desc = "Move focus to the left wind
 vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
+
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+
+vim.keymap.set("n", "<TAB>", ":bn!<CR>")
+vim.keymap.set("n", "<S-TAB>", ":bp!<CR>")
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -326,7 +359,11 @@ require("lazy").setup({
 
 			-- Useful for getting pretty icons, but requires a Nerd Font.
 			{ "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
+			-- "jonarrien/telescope-cmdline.nvim",
 		},
+		-- keys = {
+		-- 	{ ":", "<cmd>Telescope cmdline<cr>", desc = "Cmdline" },
+		-- },
 		config = function()
 			-- Telescope is a fuzzy finder that comes with a lot of different things that
 			-- it can fuzzy find! It's more than just a "file finder", it can search
@@ -369,6 +406,7 @@ require("lazy").setup({
 			-- Enable Telescope extensions if they are installed
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
+			-- pcall(require("telescope").load_extension, "cmdline")
 
 			-- See `:help telescope.builtin`
 			local builtin = require("telescope.builtin")
@@ -835,17 +873,17 @@ require("lazy").setup({
 			-- Simple and easy statusline.
 			--  You could remove this setup call if you don't like it,
 			--  and try some other statusline plugin
-			local statusline = require("mini.statusline")
+			-- local statusline = require("mini.statusline")
 			-- set use_icons to true if you have a Nerd Font
-			statusline.setup({ use_icons = vim.g.have_nerd_font })
+			-- statusline.setup({ use_icons = vim.g.have_nerd_font })
 
 			-- You can configure sections in the statusline by overriding their
 			-- default behavior. For example, here we set the section for
 			-- cursor location to LINE:COLUMN
-			---@diagnostic disable-next-line: duplicate-set-field
-			statusline.section_location = function()
-				return "%2l:%-2v"
-			end
+			-- -@diagnostic disable-next-line: duplicate-set-field
+			-- statusline.section_location = function()
+			-- 	return "%2l:%-2v"
+			-- end
 
 			-- ... and there is more!
 			--  Check out: https://github.com/echasnovski/mini.nvim
