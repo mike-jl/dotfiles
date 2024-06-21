@@ -45,34 +45,36 @@ return {
 					require("mason-nvim-dap").default_setup(config)
 				end,
 				codelldb = function(config)
-					local mason_registry = require("mason-registry")
-					local codelldb_root = mason_registry.get_package("codelldb"):get_install_path() .. "/extension/"
-					config.adapters = {
-						type = "server",
-						port = "${port}",
-						executable = {
-							command = codelldb_root .. "adapter/codelldb",
-							args = { "--port", "${port}" },
-						},
-						name = "lldb",
-					}
-					-- config.adapters = {
-					-- 	type = "executable",
-					-- 	command = codelldb_root .. "adapter/codelldb",
-					-- 	name = "lldb",
-					-- }
-					config.configurations = {
-						name = "Launch",
-						type = "lldb",
-						request = "launch",
-						program = function()
-							return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-						end,
-						cwd = "${workspaceFolder}",
-						stopOnEntry = false,
-						args = {},
-						runInTerminal = true,
-					}
+					-- 	local mason_registry = require("mason-registry")
+					-- 	local codelldb_root = mason_registry.get_package("codelldb"):get_install_path() .. "/extension/"
+					-- 	config.adapters = {
+					-- 		type = "server",
+					-- 		port = "${port}",
+					-- 		executable = {
+					-- 			command = codelldb_root .. "adapter/codelldb",
+					-- 			args = { "--port", "${port}" },
+					-- 		},
+					-- 		name = "lldb",
+					-- 	}
+					-- 	-- config.adapters = {
+					-- 	-- 	type = "executable",
+					-- 	-- 	command = codelldb_root .. "adapter/codelldb",
+					-- 	-- 	name = "lldb",
+					-- 	-- }
+					config.configurations = {}
+					-- 	config.configurations = {
+					-- 		name = "Launch",
+					-- 		type = "lldb",
+					-- 		request = "launch",
+					-- 		program = function()
+					-- 			return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+					-- 		end,
+					-- 		cwd = "${workspaceFolder}",
+					-- 		stopOnEntry = false,
+					-- 		args = {},
+					-- 		runInTerminal = true,
+					-- 	}
+					-- 	config.filetypes = { "codelldb" }
 					require("mason-nvim-dap").default_setup(config)
 				end,
 			},
