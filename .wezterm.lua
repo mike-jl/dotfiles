@@ -7,9 +7,9 @@ wezterm.on("gui-startup", function(cmd)
 end)
 
 local config = {}
--- config.font = wezterm.font("JetBrainsMono Nerd Font Mono")
+config.font = wezterm.font("JetBrainsMono Nerd Font", { weight = "DemiBold" })
 -- config.front_end = "OpenGL"
-config.font = wezterm.font("JetBrains Mono", { weight = "DemiBold" })
+-- config.font = wezterm.font("JetBrains Mono", { weight = "DemiBold" })
 config.font_size = 15
 -- config.freetype_render_target = "HorizontalLcd"
 config.cell_width = 0.9
@@ -45,7 +45,7 @@ config.window_padding = {
 	top = 5,
 	bottom = 5,
 }
-config.native_macos_fullscreen_mode = true
+-- config.native_macos_fullscreen_mode = true
 config.default_prog = { "/opt/homebrew/bin/tmux", "new", "-As0" }
 config.window_close_confirmation = "NeverPrompt"
 return config

@@ -93,6 +93,7 @@ vim.g.maplocalleader = " "
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 vim.g.netrw_fastbrowse = false
+vim.g.netrw_banner = 0
 
 -- set cmdline to 0
 -- vim.o.cmdheight = 0
@@ -653,6 +654,8 @@ require("lazy").setup({
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				"stylua", -- Used to format Lua code
+				"clangd",
+				"clang-format",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -698,6 +701,7 @@ require("lazy").setup({
 			end,
 			formatters_by_ft = {
 				lua = { "stylua" },
+				c = { "clang-format" },
 				-- Conform can also run multiple formatters sequentially
 				-- python = { "isort", "black" },
 				--
