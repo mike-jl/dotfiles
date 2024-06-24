@@ -76,7 +76,6 @@ return {
 					-- 	}
 					-- 	config.filetypes = { "codelldb" }
 					require("mason-nvim-dap").default_setup(config)
-					dap.adapters.lldb = dap.adapters.codelldb
 				end,
 			},
 
@@ -98,6 +97,13 @@ return {
 		vim.keymap.set("n", "<leader>B", function()
 			dap.set_breakpoint(vim.fn.input("Breakpoint condition: "))
 		end, { desc = "Debug: Set Breakpoint" })
+
+		vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint", linehl = "", numhl = "" })
+		vim.fn.sign_define(
+			"DapBreakpointCondition",
+			{ text = "●", texthl = "DapBreakpointCondition", linehl = "", numhl = "" }
+		)
+		vim.fn.sign_define("DapLogPoint", { text = "◆", texthl = "DapLogPoint", linehl = "", numhl = "" })
 
 		-- Dap UI setup
 		-- For more information, see |:help nvim-dap-ui|
@@ -127,6 +133,7 @@ return {
 		dap.listeners.after.event_initialized["dapui_config"] = dapui.open
 		dap.listeners.before.event_terminated["dapui_config"] = dapui.close
 		dap.listeners.before.event_exited["dapui_config"] = dapui.close
+		dap.adapters.lldb = dap.adapters.codelldb
 
 		-- Install golang specific config
 		require("dap-go").setup({

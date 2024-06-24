@@ -168,6 +168,7 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
 vim.opt.termguicolors = true
+vim.opt.colorcolumn = "100"
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 --
@@ -391,6 +392,9 @@ require("lazy").setup({
 			-- [[ Configure Telescope ]]
 			-- See `:help telescope` and `:help telescope.setup()`
 			require("telescope").setup({
+				defaults = {
+					file_ignore_patterns = { ".git/" },
+				},
 				-- You can put your default mappings / updates / etc. in here
 				--  All the info you're looking for is in `:help telescope.setup()`
 				--
@@ -614,7 +618,7 @@ require("lazy").setup({
 			local servers = {
 				clangd = {},
 				gopls = {},
-				-- pyright = {},
+				pyright = {},
 				-- rust_analyzer = {},
 				-- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
 				--
@@ -656,6 +660,9 @@ require("lazy").setup({
 				"stylua", -- Used to format Lua code
 				"clangd",
 				"clang-format",
+				"gofumpt",
+				"golines",
+				"templ",
 			})
 			require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
@@ -702,12 +709,18 @@ require("lazy").setup({
 			formatters_by_ft = {
 				lua = { "stylua" },
 				c = { "clang-format" },
+				go = { "gofumpt", "golines" },
 				-- Conform can also run multiple formatters sequentially
 				-- python = { "isort", "black" },
 				--
 				-- You can use a sub-list to tell conform to run *until* a formatter
 				-- is found.
 				-- javascript = { { "prettierd", "prettier" } },
+			},
+			formatters = {
+				golines = {
+					prepend_args = { "-m", "100" },
+				},
 			},
 		},
 	},
@@ -829,6 +842,17 @@ require("lazy").setup({
 		priority = 1000,
 
 		init = function()
+			require("catppuccin").setup({
+				flavour = "mocha",
+				dap = true,
+				dap_ui = true,
+				telescope = {
+					enabled = true,
+					-- style = "nvchad"
+				},
+				which_key = true,
+				-- transparent_background = true,
+			})
 			vim.cmd.colorscheme("catppuccin-mocha")
 		end,
 	},
@@ -875,7 +899,45 @@ require("lazy").setup({
 			-- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
 			-- - sd'   - [S]urround [D]elete [']quotes
 			-- - sr)'  - [S]urround [R]eplace [)] [']
-			require("mini.surround").setup()
+			require("mini.surround").setup({
+				-- Add custom surroundings to be used on top of builtin ones. For more
+				-- information with examples, see `:h MiniSurround.config`.
+				custom_surroundings = nil,
+
+				-- Duration (in ms) of highlight when calling `MiniSurround.highlight()`
+				highlight_duration = 500,
+
+				-- Module mappings. Use `''` (empty string) to disable one.
+				mappings = {
+					add = "<A-s>a", -- Add surrounding in Normal and Visual modes
+					delete = "<A-s>d", -- Delete surrounding
+					find = "<A-s>f", -- Find surrounding (to the right)
+					find_left = "<A-s>F", -- Find surrounding (to the left)
+					highlight = "<A-s>h", -- Highlight surrounding
+					replace = "<A-s>r", -- Replace surrounding
+					update_n_lines = "<A-s>n", -- Update `n_lines`
+
+					suffix_last = "l", -- Suffix to search with "prev" method
+					suffix_next = "n", -- Suffix to search with "next" method
+				},
+
+				-- Number of lines within which surrounding is searched
+				n_lines = 20,
+
+				-- Whether to respect selection type:
+				-- - Place surroundings on separate lines in linewise mode.
+				-- - Place surroundings on each line in blockwise mode.
+				respect_selection_type = false,
+
+				-- How to search for surrounding (first inside current line, then inside
+				-- neighborhood). One of 'cover', 'cover_or_next', 'cover_or_prev',
+				-- 'cover_or_nearest', 'next', 'prev', 'nearest'. For more details,
+				-- see `:h MiniSurround.config`.
+				search_method = "cover",
+
+				-- Whether to disable showing non-error feedback
+				silent = false,
+			})
 
 			-- Simple and easy statusline.
 			--  You could remove this setup call if you don't like it,
