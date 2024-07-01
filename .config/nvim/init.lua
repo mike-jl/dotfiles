@@ -469,7 +469,6 @@ require("lazy").setup({
 				which_key = true,
 				-- transparent_background = true,
 			})
-			vim.cmd.colorscheme("catppuccin-mocha")
 		end,
 	},
 
