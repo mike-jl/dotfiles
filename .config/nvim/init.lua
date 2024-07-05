@@ -92,8 +92,6 @@ vim.g.maplocalleader = " "
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
-vim.g.netrw_fastbrowse = false
-vim.g.netrw_banner = 0
 
 -- set cmdline to 0
 -- vim.o.cmdheight = 0
@@ -459,7 +457,7 @@ require("lazy").setup({
 
 		init = function()
 			require("catppuccin").setup({
-				flavour = "mocha",
+				-- flavour = "mocha",
 				dap = true,
 				dap_ui = true,
 				telescope = {

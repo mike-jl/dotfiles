@@ -155,7 +155,14 @@ return { -- LSP Configuration & Plugins
 		--  - settings (table): Override the default settings passed when initializing the server.
 		--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 		local servers = {
-			clangd = {},
+			clangd = {
+				cmd = {
+					"/Users/michael/src/llvm-project/build/bin/clangd",
+					"--background-index",
+					"--query-driver=/Users/michael/.platformio/packages/toolchain-xtensa-esp32@8.4.0+2021r2-patch5/bin/xtensa-esp32-elf-gcc*,/Users/michael/.platformio/packages/toolchain-xtensa-esp32@8.4.0+2021r2-patch5/bin/xtensa-esp32-elf-g++*,xtensa-esp32-elf-gcc*,xtensa-esp32-elf-g++*",
+					"--log=verbose",
+				},
+			},
 			gopls = {},
 			pyright = {},
 			-- rust_analyzer = {},
