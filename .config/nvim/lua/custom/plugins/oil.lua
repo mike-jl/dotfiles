@@ -14,41 +14,53 @@ local git_ignored = setmetatable({}, {
 			end
 		end
 
-		rawset(self, key, ret)
+		-- rawset(self, key, ret)
 		return ret
 	end,
 })
 
 return {
-	"stevearc/oil.nvim",
-	-- Optional dependencies
-	dependencies = { "nvim-tree/nvim-web-devicons" },
-	opts = {
-		delete_to_trash = true,
-		view_options = {
-			show_hidden = false,
-			is_always_hidden = function(name, _)
-				return name == ".."
-			end,
-			is_hidden_file = function(name, _)
-				-- dotfiles are always considered hidden
-				-- if vim.startswith(name, ".") then
-				-- 	return true
-				-- end
-				if name == ".git" then
-					return true
-				end
-				local dir = require("oil").get_current_dir()
-				-- if no local directory (e.g. for ssh connections), always show
-				if not dir then
-					return false
-				end
-				-- Check if file is gitignored
-				return vim.list_contains(git_ignored[dir], name)
-			end,
+	{
+		"refractalize/oil-git-status.nvim",
+		dependencies = {
+			"stevearc/oil.nvim",
 		},
+		config = true,
 	},
-	init = function()
-		vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
-	end,
+	{
+		"stevearc/oil.nvim",
+		-- Optional dependencies
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		opts = {
+			delete_to_trash = true,
+			view_options = {
+				show_hidden = false,
+				is_always_hidden = function(name, _)
+					return name == ".."
+				end,
+				is_hidden_file = function(name, _)
+					-- dotfiles are always considered hidden
+					-- if vim.startswith(name, ".") then
+					-- 	return true
+					-- end
+					if name == ".git" then
+						return true
+					end
+					local dir = require("oil").get_current_dir()
+					-- if no local directory (e.g. for ssh connections), always show
+					if not dir then
+						return false
+					end
+					-- Check if file is gitignored
+					return vim.list_contains(git_ignored[dir], name)
+				end,
+			},
+			win_options = {
+				signcolumn = "yes:2",
+			},
+		},
+		init = function()
+			vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+		end,
+	},
 }

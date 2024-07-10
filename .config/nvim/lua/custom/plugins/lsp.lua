@@ -157,9 +157,9 @@ return { -- LSP Configuration & Plugins
 		local servers = {
 			clangd = {
 				cmd = {
-					"/Users/michael/src/llvm-project/build/bin/clangd",
+					"/Users/michael/src/esp-clang/bin/clangd",
 					"--background-index",
-					"--query-driver=/Users/michael/.platformio/packages/toolchain-xtensa-esp32@8.4.0+2021r2-patch5/bin/xtensa-esp32-elf-gcc*,/Users/michael/.platformio/packages/toolchain-xtensa-esp32@8.4.0+2021r2-patch5/bin/xtensa-esp32-elf-g++*,xtensa-esp32-elf-gcc*,xtensa-esp32-elf-g++*",
+					"--query-driver=/Users/michael/.platformio/packages/toolchain-xtensa-esp32@8.4.0+2021r2-patch5/bin/xtensa-esp32-elf-g*,/opt/homebrew/bin/arm-none-eabi-g*",
 					"--log=verbose",
 				},
 			},
@@ -176,6 +176,8 @@ return { -- LSP Configuration & Plugins
 			templ = {},
 			-- python-lsp-server = {},
 			--
+			html = {},
+			htmx = {},
 
 			lua_ls = {
 				-- cmd = {...},
