@@ -178,6 +178,22 @@ return { -- LSP Configuration & Plugins
 			--
 			html = {},
 			htmx = {},
+			-- tailwindcss = {},
+			tsserver = {},
+			sqls = {
+				settings = {
+					sqls = {
+						lowercaseKeywords = false,
+						connections = {
+							{
+								driver = "sqlite3",
+								dataSourceName = "file:/Users/michael/src/priceCalc/test123.db",
+							},
+						},
+					},
+				},
+			},
+			jsonls = {},
 
 			lua_ls = {
 				-- cmd = {...},
@@ -223,6 +239,16 @@ return { -- LSP Configuration & Plugins
 					require("lspconfig")[server_name].setup(server)
 				end,
 			},
+		})
+
+		require("lspconfig").sqls.setup({
+			on_attach = function(client, bufnr)
+				client.server_capabilities.documentFormattingProvider = false
+				client.server_capabilities.documentRangeFormattingProvider = false
+				require("sqls").on_attach(client, bufnr) -- require sqls.nvim
+			end,
+			settings = servers.sqls.settings,
+			capabilities = capabilities,
 		})
 	end,
 }

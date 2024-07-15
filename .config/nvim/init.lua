@@ -171,8 +171,8 @@ vim.opt.colorcolumn = "100"
 --  See `:help vim.keymap.set()`
 --
 -- allow to move selected block in visual mode with J and K
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move Selection Down" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move Selection Up" })
 
 -- keep search term in the middlde
 vim.keymap.set("n", "n", "nzzzv")
@@ -311,25 +311,29 @@ require("lazy").setup({
 
 	{ -- Useful plugin to show you pending keybinds.
 		"folke/which-key.nvim",
-		event = "VimEnter", -- Sets the loading event to 'VimEnter'
-		config = function() -- This is the function that runs, AFTER loading
-			require("which-key").setup()
-
-			-- Document existing key chains
-			require("which-key").register({
-				["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
-				["<leader>d"] = { name = "[D]ocument", _ = "which_key_ignore" },
-				["<leader>r"] = { name = "[R]ename", _ = "which_key_ignore" },
-				["<leader>s"] = { name = "[S]earch", _ = "which_key_ignore" },
-				["<leader>w"] = { name = "[W]orkspace", _ = "which_key_ignore" },
-				["<leader>t"] = { name = "[T]oggle", _ = "which_key_ignore" },
-				["<leader>h"] = { name = "Git [H]unk", _ = "which_key_ignore" },
-			})
-			-- visual mode
-			require("which-key").register({
-				["<leader>h"] = { "Git [H]unk" },
-			}, { mode = "v" })
-		end,
+		event = "VeryLazy", -- Sets the loading event to 'VimEnter'
+		opts = {
+			icons = { rules = false },
+			spec = {
+				{ "<leader>c", group = "[C]ode" },
+				{ "<leader>d", group = "[D]ocument" },
+				{ "<leader>r", group = "[R]ename" },
+				{ "<leader>s", group = "[S]earch" },
+				{ "<leader>w", group = "[W]orkspace" },
+				{ "<leader>t", group = "[T]oggle" },
+				{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
+				{
+					{ "<up>", hidden = true },
+					{ "<down>", hidden = true },
+					{ "<left>", hidden = true },
+					{ "<right>", hidden = true },
+					{ "n", hidden = true },
+					{ "N", hidden = true },
+					{ "<leader>y", hidden = true, mode = { "n", "v" } },
+					{ "<leader>Y", hidden = true },
+				},
+			},
+		},
 	},
 
 	-- NOTE: Plugins can specify dependencies.
@@ -374,6 +378,7 @@ require("lazy").setup({
 			--  into multiple repos for maintenance purposes.
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-nvim-lsp-signature-help",
 		},
 		config = function()
 			-- See `:help cmp`
@@ -388,16 +393,27 @@ require("lazy").setup({
 					end,
 				},
 				completion = { completeopt = "menu,menuone,noinsert" },
+				view = {
+					docs = { auto_open = true },
+				},
 
 				-- For an understanding of why these mappings were
 				-- chosen, you will need to read `:help ins-completion`
 				--
 				-- No, but seriously. Please read `:help ins-completion`, it is really good!
 				mapping = cmp.mapping.preset.insert({
+					["<M-x>"] = cmp.mapping(function()
+						print("aaA")
+						if cmp.visible_docs() then
+							cmp.close_docs()
+						else
+							cmp.open_docs()
+						end
+					end, { "i", "s" }),
 					-- Select the [n]ext item
-					-- ["<C-n>"] = cmp.mapping.select_next_item(),
+					["<C-n>"] = cmp.mapping.select_next_item(),
 					-- -- Select the [p]revious item
-					-- ["<C-p>"] = cmp.mapping.select_prev_item(),
+					["<C-p>"] = cmp.mapping.select_prev_item(),
 					--
 					-- Scroll the documentation window [b]ack / [f]orward
 					["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -406,13 +422,13 @@ require("lazy").setup({
 					-- Accept ([y]es) the completion.
 					--  This will auto-import if your LSP supports it.
 					--  This will expand snippets if the LSP sent a snippet.
-					-- ["<C-y>"] = cmp.mapping.confirm({ select = true }),
+					["<C-y>"] = cmp.mapping.confirm({ select = true }),
 					--
 					-- If you prefer more traditional completion keymaps,
 					-- you can uncomment the following lines
-					["<CR>"] = cmp.mapping.confirm({ select = true }),
-					["<Tab>"] = cmp.mapping.select_next_item(),
-					["<S-Tab>"] = cmp.mapping.select_prev_item(),
+					-- ["<CR>"] = cmp.mapping.confirm({ select = true }),
+					-- ["<Tab>"] = cmp.mapping.select_next_item(),
+					-- ["<S-Tab>"] = cmp.mapping.select_prev_item(),
 
 					-- Manually trigger a completion from nvim-cmp.
 					--  Generally you don't need this, because nvim-cmp will display
@@ -445,6 +461,7 @@ require("lazy").setup({
 					{ name = "nvim_lsp" },
 					{ name = "luasnip" },
 					{ name = "path" },
+					{ name = "nvim_lsp_signature_help" },
 				},
 			})
 		end,
@@ -628,7 +645,7 @@ require("lazy").setup({
 	require("kickstart.plugins.debug"),
 	require("kickstart.plugins.indent_line"),
 	-- require 'kickstart.plugins.lint',
-	-- require("kickstart.plugins.autopairs"),
+	require("kickstart.plugins.autopairs"),
 	-- require 'kickstart.plugins.neo-tree',
 	-- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
