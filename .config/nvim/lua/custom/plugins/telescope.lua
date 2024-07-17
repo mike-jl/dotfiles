@@ -22,7 +22,6 @@ return { -- Fuzzy Finder (files, lsp, etc)
         -- Useful for getting pretty icons, but requires a Nerd Font.
         { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
         -- "jonarrien/telescope-cmdline.nvim",
-        { "theprimeagen/harpoon", branch = "harpoon2" },
     },
     -- keys = {
     -- 	{ ":", "<cmd>Telescope cmdline<cr>", desc = "Cmdline" },
@@ -86,17 +85,6 @@ return { -- Fuzzy Finder (files, lsp, etc)
         -- See `:help telescope.builtin`
         local builtin = require("telescope.builtin")
 
-        local function live_grep_harpoon()
-            local search_dirs = {}
-            for _, h in ipairs(require("harpoon"):list():display()) do
-                table.insert(search_dirs, h)
-            end
-            builtin.live_grep({
-                search_dirs = search_dirs,
-            })
-        end
-
-        vim.keymap.set("n", "<leader>sh", live_grep_harpoon, { desc = "[S]earch [H]harpoon" })
         vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
         vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
         vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
