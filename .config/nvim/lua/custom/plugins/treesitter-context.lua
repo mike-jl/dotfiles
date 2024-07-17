@@ -1,6 +1,6 @@
 return {
-	"nvim-treesitter/nvim-treesitter-context",
-	config = {
-		multiline_threshold = 5,
-	},
+    "nvim-treesitter/nvim-treesitter-context",
+    opts = {
+        multiline_threshold = 5,
+    },
 }

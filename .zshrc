@@ -8,3 +8,4 @@ setopt inc_append_history
 source <(fzf --zsh)
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+bindkey -M menuselect '\r' .accept-line
