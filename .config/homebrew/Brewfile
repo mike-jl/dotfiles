@@ -1,3 +1,4 @@
+tap "cormacrelf/tap"
 tap "homebrew/bundle"
 tap "koekeishiya/formulae"
 brew "bat"
@@ -6,21 +7,35 @@ brew "dotnet"
 brew "fastfetch"
 brew "fd"
 brew "fzf"
+brew "gnu-sed"
+brew "goose"
 brew "jq"
+brew "luacheck"
 brew "mas"
 brew "neovim"
+brew "ninja"
 brew "node"
+brew "platformio"
 brew "pure"
 brew "rclone"
 brew "ripgrep"
+brew "rust"
+brew "sqlc"
 brew "stow"
 brew "telnet"
 brew "tmux"
+brew "typos-cli"
+brew "universal-ctags"
 brew "wget"
+brew "zsh-autocomplete"
+brew "zsh-autosuggestions"
+brew "cormacrelf/tap/dark-notify"
 cask "alacritty"
+cask "db-browser-for-sqlite"
 cask "displaylink"
 cask "font-jetbrains-mono-nerd-font"
 cask "gcc-arm-embedded"
+cask "jordanbaird-ice"
 cask "keycastr"
 cask "sioyek"
 cask "syntax-highlight"
@@ -28,6 +43,7 @@ cask "wezterm"
 mas "AdGuard for Safari", id: 1440147259
 mas "Brother P-touch Editor", id: 1453365242
 mas "Dark Reader for Safari", id: 1438243180
+mas "Discovery", id: 1381004916
 mas "Ethernet Status", id: 1186187538
 mas "GarageBand", id: 682658836
 mas "iMovie", id: 408981434
@@ -39,6 +55,7 @@ mas "Microsoft Remote Desktop", id: 1295203466
 mas "Microsoft Word", id: 462054704
 mas "Notability", id: 360593530
 mas "OneDrive", id: 823766827
+mas "OTP Auth", id: 1471867429
 mas "SponsorBlock", id: 1573461917
 mas "Tailscale", id: 1475387142
 mas "Ultrawider", id: 6473668797
