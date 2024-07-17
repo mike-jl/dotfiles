@@ -242,6 +242,12 @@ vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper win
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 
+if vim.lsp.inlay_hint then
+    vim.keymap.set("n", "<leader>uh", function()
+        vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+    end, { desc = "Toggle Inlay Hints" })
+end
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 

@@ -254,8 +254,31 @@ return { -- LSP Configuration & Plugins
                     "--query-driver=/Users/michael/.platformio/packages/toolchain-xtensa-esp32@8.4.0+2021r2-patch5/bin/xtensa-esp32-elf-g*,/opt/homebrew/bin/arm-none-eabi-g*",
                     "--log=verbose",
                 },
+                settings = {
+                    clangd = {
+                        InlayHints = {
+                            Designators = true,
+                            Enabled = true,
+                            ParameterNames = true,
+                            DeducedTypes = true,
+                        },
+                        fallbackFlags = { "-std=c++20" },
+                    },
+                },
             },
-            gopls = {},
+            gopls = {
+                settings = {
+                    hints = {
+                        rangeVariableTypes = true,
+                        parameterNames = true,
+                        constantValues = true,
+                        assignVariableTypes = true,
+                        compositeLiteralFields = true,
+                        compositeLiteralTypes = true,
+                        functionTypeParameters = true,
+                    },
+                },
+            },
             pyright = {},
             -- rust_analyzer = {},
             -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -296,6 +319,7 @@ return { -- LSP Configuration & Plugins
                         completion = {
                             callSnippet = "Replace",
                         },
+                        hint = { enable = true },
                         -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
                         -- diagnostics = { disable = { 'missing-fields' } },
                     },
@@ -329,8 +353,8 @@ return { -- LSP Configuration & Plugins
                     -- This handles overriding only values explicitly passed
                     -- by the server configuration above. Useful when disabling
                     -- certain features of an LSP (for example, turning off formatting for tsserver)
-                    server.capabilities =
-                        vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+                    -- server.capabilities =
+                    -- vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
                     require("lspconfig")[server_name].setup(coq.lsp_ensure_capabilities(server))
                 end,
             },
@@ -343,7 +367,7 @@ return { -- LSP Configuration & Plugins
                 require("sqls").on_attach(client, bufnr) -- require sqls.nvim
             end,
             settings = servers.sqls.settings,
-            capabilities = capabilities,
+            -- capabilities = capabilities,
         }))
     end,
 }
