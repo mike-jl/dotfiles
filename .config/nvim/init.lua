@@ -380,6 +380,7 @@ require("lazy").setup({
                         LspSignatureActiveCust = { bg = colors.surface1, style = { "bold" } },
                     }
                 end,
+                coc_nvim = true,
             })
         end,
     },

@@ -2,7 +2,7 @@ return {
     "mike-jl/lualine.nvim",
     dependencies = {
         "nvim-tree/nvim-web-devicons",
-        { "theprimeagen/harpoon", branch = "harpoon2" },
+        { "kimabrandt-flx/harpoon" },
     },
 
     opts = {
