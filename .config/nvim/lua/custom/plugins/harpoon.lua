@@ -32,7 +32,12 @@ return {
                 return true
             end
 
-            local bufnr = vim.fn.bufnr(vim.loop.fs_realpath(current.value))
+            local bufnr = -1
+            local hPath = vim.loop.fs_realpath(current.value)
+            if hPath then
+                bufnr = vim.fn.bufnr(hPath)
+            end
+
             return bufnr == vim.fn.bufnr()
         end
 
