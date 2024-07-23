@@ -3,6 +3,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     event = "VimEnter",
     branch = "0.1.x",
     dependencies = {
+        "mike-jl/harpoonEx",
         "nvim-lua/plenary.nvim",
         { -- If encountering errors, see telescope-fzf-native README for installation instructions
             "nvim-telescope/telescope-fzf-native.nvim",
@@ -51,6 +52,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
         require("telescope").setup({
             defaults = {
                 file_ignore_patterns = { ".git/" },
+                disable_devicons = true,
             },
             -- You can put your default mappings / updates / etc. in here
             --  All the info you're looking for is in `:help telescope.setup()`

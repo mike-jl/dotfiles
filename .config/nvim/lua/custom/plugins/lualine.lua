@@ -1,8 +1,9 @@
 return {
-    "mike-jl/lualine.nvim",
+    "nvim-lualine/lualine.nvim",
     dependencies = {
         "nvim-tree/nvim-web-devicons",
-        { "kimabrandt-flx/harpoon" },
+        { "theprimeagen/harpoon" },
+        { "mike-jl/harpoonEx", dev = true },
     },
 
     opts = {
