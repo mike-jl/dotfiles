@@ -32,8 +32,15 @@ return {
         end, { desc = "Add current filte to Harpoon List" })
 
         vim.keymap.set("n", "<M-e>", function()
-            local telescope = require("telescope")
-            telescope.extensions.harpoonEx.harpoonEx()
+            require("telescope").extensions.harpoonEx.harpoonEx({
+                -- Optional: define mappings, default mappings:
+                attach_mappings = function(_, map)
+                    local actions = require("telescope").extensions.harpoonEx.actions
+                    map("n", "dd", actions.delete_mark)
+                    return true
+                end,
+            })
+            return true
         end, { desc = "Open harpoon window" })
 
         for i = 1, 9 do
