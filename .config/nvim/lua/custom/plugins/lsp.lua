@@ -327,7 +327,11 @@ return { -- LSP Configuration & Plugins
                     },
                 },
             },
-            typos_lsp = {},
+            typos_lsp = {
+                init_options = {
+                    diagnosticSeverity = "Info",
+                },
+            },
         }
 
         -- Ensure the servers and tools above are installed
