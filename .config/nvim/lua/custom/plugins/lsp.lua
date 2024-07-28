@@ -13,71 +13,7 @@ return { -- LSP Configuration & Plugins
         -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
         -- used for completion, annotations and signatures of Neovim apis
         { "folke/neodev.nvim", opts = {} },
-        -- main one
-        { "ms-jpq/coq_nvim", branch = "coq" },
-
-        -- 9000+ Snippets
-        { "ms-jpq/coq.artifacts", branch = "artifacts" },
-
-        -- lua & third party sources -- See https://github.com/ms-jpq/coq.thirdparty
-        -- Need to **configure separately**
-        { "ms-jpq/coq.thirdparty", branch = "3p" },
-        -- - shell repl
-        -- - nvim lua api
-        -- - scientific calculator
-        -- - comment banner
-        -- - etc
     },
-    init = function()
-        vim.g.coq_settings = {
-            auto_start = "shut-up", -- if you want to start COQ at startup
-            -- Your COQ settings here
-            keymap = { recommended = false },
-        }
-        local remap = vim.api.nvim_set_keymap
-        local npairs = require("nvim-autopairs")
-
-        -- these mappings are coq recommended mappings unrelated to nvim-autopairs
-        remap(
-            "i",
-            "<esc>",
-            [[pumvisible() ? "<c-e><esc>" : "<esc>"]],
-            { expr = true, noremap = true }
-        )
-        remap(
-            "i",
-            "<c-c>",
-            [[pumvisible() ? "<c-e><c-c>" : "<c-c>"]],
-            { expr = true, noremap = true }
-        )
-        remap("i", "<tab>", [[pumvisible() ? "<c-n>" : "<tab>"]], { expr = true, noremap = true })
-        remap("i", "<s-tab>", [[pumvisible() ? "<c-p>" : "<bs>"]], { expr = true, noremap = true })
-
-        -- skip it, if you use another global object
-        _G.MUtils = {}
-
-        MUtils.CR = function()
-            if vim.fn.pumvisible() ~= 0 then
-                if vim.fn.complete_info({ "selected" }).selected ~= -1 then
-                    return npairs.esc("<c-y>")
-                else
-                    return npairs.esc("<c-e>") .. npairs.autopairs_cr()
-                end
-            else
-                return npairs.autopairs_cr()
-            end
-        end
-        remap("i", "<cr>", "v:lua.MUtils.CR()", { expr = true, noremap = true })
-
-        MUtils.BS = function()
-            if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info({ "mode" }).mode == "eval" then
-                return npairs.esc("<c-e>") .. npairs.autopairs_bs()
-            else
-                return npairs.autopairs_bs()
-            end
-        end
-        remap("i", "<bs>", "v:lua.MUtils.BS()", { expr = true, noremap = true })
-    end,
     config = function()
         vim.lsp.set_log_level("off")
         -- Brief aside: **What is LSP?**
@@ -235,7 +171,11 @@ return { -- LSP Configuration & Plugins
         --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
         --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
         local capabilities = vim.lsp.protocol.make_client_capabilities()
-        -- capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+        capabilities = vim.tbl_deep_extend(
+            "force",
+            capabilities,
+            require("cmp_nvim_lsp").default_capabilities()
+        )
 
         -- Enable the following language servers
         --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -350,7 +290,6 @@ return { -- LSP Configuration & Plugins
         })
         require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-        local coq = require("coq")
         require("mason-lspconfig").setup({
             handlers = {
                 function(server_name)
@@ -359,13 +298,13 @@ return { -- LSP Configuration & Plugins
                     -- by the server configuration above. Useful when disabling
                     -- certain features of an LSP (for example, turning off formatting for tsserver)
                     -- server.capabilities =
-                    -- vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-                    require("lspconfig")[server_name].setup(coq.lsp_ensure_capabilities(server))
+                    vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+                    require("lspconfig")[server_name].setup(server)
                 end,
             },
         })
 
-        require("lspconfig").sqls.setup(coq.lsp_ensure_capabilities({
+        require("lspconfig").sqls.setup({
             on_attach = function(client, bufnr)
                 client.server_capabilities.documentFormattingProvider = false
                 client.server_capabilities.documentRangeFormattingProvider = false
@@ -373,6 +312,6 @@ return { -- LSP Configuration & Plugins
             end,
             settings = servers.sqls.settings,
             -- capabilities = capabilities,
-        }))
+        })
     end,
 }
