@@ -17,7 +17,7 @@ local git_ignored = setmetatable({}, {
             end
         end
 
-        -- rawset(self, key, ret)
+        rawset(self, key, ret)
         return ret
     end,
 })
