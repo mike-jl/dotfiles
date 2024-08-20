@@ -15,3 +15,8 @@ prompt pure
 setopt inc_append_history
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
+
+if [ -z "$TMUX" ]
+then
+/opt/homebrew/bin/tmux new -As0
+fi

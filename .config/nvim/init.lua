@@ -7,6 +7,9 @@ vim.g.maplocalleader = " "
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
+vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
+
 -- set cmdline to 0
 -- vim.o.cmdheight = 0
 

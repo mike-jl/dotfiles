@@ -83,7 +83,7 @@ return { -- Autocompletion
                     else
                         cmp.open_docs()
                     end
-                end, { "i", "s" }),
+                end, { "i", "s", "n" }),
 
                 -- Scroll the documentation window [d]own [u]p
                 ["<C-d>"] = cmp.mapping.scroll_docs(-4),

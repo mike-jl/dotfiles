@@ -7,20 +7,22 @@ return {
     init = function()
         require("catppuccin").setup({
             -- flavour = "mocha",
-            dap = true,
-            dap_ui = true,
-            telescope = {
-                enabled = true,
-                -- style = "nvchad"
-            },
-            which_key = true,
             -- transparent_background = true,
             custom_highlights = function(colors)
                 return {
                     LspSignatureActiveCust = { bg = colors.surface1, style = { "bold" } },
                 }
             end,
-            coc_nvim = true,
+            integrations = {
+                dap = true,
+                dap_ui = true,
+                which_key = true,
+                telescope = {
+                    enabled = true,
+                    -- style = "nvchad"
+                },
+                notify = true,
+            },
         })
     end,
 }

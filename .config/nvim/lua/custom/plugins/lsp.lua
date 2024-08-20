@@ -186,6 +186,7 @@ return { -- LSP Configuration & Plugins
             clangd = {
                 cmd = {
                     "/Users/michael/src/esp-clang/bin/clangd",
+                    "--offset-encoding=utf-16",
                     "--background-index",
                     "--query-driver=/Users/michael/.platformio/packages/toolchain-xtensa-esp32@8.4.0+2021r2-patch5/bin/xtensa-esp32-elf-g*,/opt/homebrew/bin/arm-none-eabi-g*",
                 },
