@@ -1,4 +1,6 @@
 return {
     "chentoast/marks.nvim",
-    opts = {},
+    opts = {
+        builtin_marks = { ".", '"', "'", "<", ">", "^" },
+    },
 }
