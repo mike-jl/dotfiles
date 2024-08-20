@@ -37,6 +37,7 @@ return {
             },
         },
         event = { "BufWritePre" },
+        cmd = { "ConformInfo" },
         keys = {
             {
                 "<leader>f",
