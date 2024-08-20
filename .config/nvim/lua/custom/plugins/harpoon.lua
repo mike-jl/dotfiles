@@ -76,7 +76,9 @@ return {
             (vim.fn.argc() == 0 or (vim.fn.argc() == 1 and vim.fn.isdirectory(vim.fn.argv(0)) == 1))
             and vim.api.nvim_get_option_value("buftype", { buf = 0 }) == ""
         then
-            harpoonEx.next_harpoon(harpoon:list(), false)
+            vim.schedule(function()
+                harpoonEx.next_harpoon(harpoon:list(), false)
+            end)
         end
     end,
 }
