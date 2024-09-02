@@ -35,6 +35,7 @@ return {
                 -- is found.
                 -- javascript = { { "prettierd", "prettier" } },
                 sql = { "sqlfmt" },
+                templ = { "templ" },
             },
             formatters = {
                 golines = {
@@ -48,7 +49,7 @@ return {
             {
                 "<leader>f",
                 function()
-                    require("conform").format({ async = true, format = "fallback" })
+                    require("conform").format({ async = true, lsp_format = "fallback" })
                 end,
                 mode = "",
                 desc = "[F]ormat buffer",
