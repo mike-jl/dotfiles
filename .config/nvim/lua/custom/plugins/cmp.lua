@@ -6,6 +6,9 @@ return { -- Autocompletion
             "garymjr/nvim-snippets",
             opts = {
                 friendly_snippets = true,
+                extended_filetypes = {
+                    templ = { "html", "go" },
+                },
             },
             dependencies = { "rafamadriz/friendly-snippets" },
         },
@@ -16,7 +19,7 @@ return { -- Autocompletion
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-nvim-lsp-signature-help",
         "onsails/lspkind.nvim",
-        { "zbirenbaum/copilot-cmp", opts = {} },
+        -- { "zbirenbaum/copilot-cmp", opts = {} },
     },
     config = function()
         local cmp = require("cmp")
@@ -39,7 +42,7 @@ return { -- Autocompletion
                     end,
                 }),
             },
-            experimental = { ghost_text = true },
+            -- experimental = { ghost_text = true },
             snippet = {
                 expand = function(args)
                     vim.snippet.expand(args.body)
@@ -95,7 +98,7 @@ return { -- Autocompletion
                 { name = "path" },
                 { name = "nvim_lsp_signature_help" },
                 -- Copilot Source
-                { name = "copilot", group_index = 2 },
+                -- { name = "copilot", group_index = 2 },
             },
         })
 
