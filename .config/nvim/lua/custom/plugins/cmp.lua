@@ -2,16 +2,32 @@ return { -- Autocompletion
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
     dependencies = {
+        -- Snippet Engine & its associated nvim-cmp source
         {
-            "garymjr/nvim-snippets",
-            opts = {
-                friendly_snippets = true,
-                extended_filetypes = {
-                    templ = { "html", "go" },
+            "L3MON4D3/LuaSnip",
+            build = (function()
+                -- Build Step is needed for regex support in snippets.
+                -- This step is not supported in many windows environments.
+                -- Remove the below condition to re-enable on windows.
+                if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
+                    return
+                end
+                return "make install_jsregexp"
+            end)(),
+            dependencies = {
+                -- `friendly-snippets` contains a variety of premade snippets.
+                --    See the README about individual language/framework/plugin snippets:
+                --    https://github.com/rafamadriz/friendly-snippets
+                {
+                    "rafamadriz/friendly-snippets",
+                    config = function()
+                        require("luasnip.loaders.from_vscode").lazy_load()
+                    end,
                 },
             },
-            dependencies = { "rafamadriz/friendly-snippets" },
         },
+        "saadparwaiz1/cmp_luasnip",
+
         -- Adds other completion capabilities.
         --  nvim-cmp does not ship with all sources by default. They are split
         --  into multiple repos for maintenance purposes.
@@ -22,7 +38,11 @@ return { -- Autocompletion
         -- { "zbirenbaum/copilot-cmp", opts = {} },
     },
     config = function()
+        -- See `:help cmp`
         local cmp = require("cmp")
+        local luasnip = require("luasnip")
+        luasnip.config.setup({})
+        luasnip.filetype_extend("templ", { "html", "go" })
 
         cmp.setup({
             formatting = {
@@ -38,6 +58,7 @@ return { -- Autocompletion
                     -- The function below will be called before any actual modifications from lspkind
                     -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
                     before = function(entry, vim_item)
+                        -- ...
                         return vim_item
                     end,
                 }),
@@ -45,11 +66,10 @@ return { -- Autocompletion
             -- experimental = { ghost_text = true },
             snippet = {
                 expand = function(args)
-                    vim.snippet.expand(args.body)
+                    luasnip.lsp_expand(args.body)
                 end,
             },
             completion = { completeopt = "menu,menuone,noinsert" },
-            preselect = "None",
             view = {
                 docs = { auto_open = true },
             },
@@ -83,9 +103,13 @@ return { -- Autocompletion
 
                 ["<CR>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
-                        cmp.confirm({
-                            select = true,
-                        })
+                        if luasnip.expandable() then
+                            luasnip.expand()
+                        else
+                            cmp.confirm({
+                                select = true,
+                            })
+                        end
                     else
                         fallback()
                     end
@@ -94,8 +118,8 @@ return { -- Autocompletion
                 ["<Tab>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_next_item()
-                    elseif vim.snippet.active({ direction = 1 }) then
-                        vim.snippet.jump(1)
+                    elseif luasnip.locally_jumpable(1) then
+                        luasnip.jump(1)
                     else
                         fallback()
                     end
@@ -104,12 +128,15 @@ return { -- Autocompletion
                 ["<S-Tab>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_prev_item()
-                    elseif vim.snippet.active({ direction = -1 }) then
-                        vim.snippet.jump(-1)
+                    elseif luasnip.locally_jumpable(-1) then
+                        luasnip.jump(-1)
                     else
                         fallback()
                     end
                 end, { "i", "s" }),
+
+                -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
+                --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
             }),
             sources = {
                 {
@@ -118,7 +145,7 @@ return { -- Autocompletion
                     group_index = 0,
                 },
                 { name = "nvim_lsp" },
-                { name = "snippets" },
+                { name = "luasnip" },
                 { name = "path" },
                 { name = "nvim_lsp_signature_help" },
                 -- Copilot Source
