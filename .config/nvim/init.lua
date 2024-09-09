@@ -112,6 +112,17 @@ vim.keymap.set("n", "<leader>Y", [["*Y]])
 vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
+---- Auto indent on empty line.
+local function indent_empty_line(key)
+    vim.keymap.set("n", key, function()
+        return string.match(vim.api.nvim_get_current_line(), "%g") == nil and "cc" or key
+    end, { expr = true, noremap = true })
+end
+indent_empty_line("i")
+indent_empty_line("I")
+indent_empty_line("a")
+indent_empty_line("A")
+
 -- Diagnostic keymaps
 vim.keymap.set(
     "n",
