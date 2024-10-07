@@ -4,9 +4,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
-
 vim.opt.cursorline = true
 vim.opt.cursorlineopt = "number"
 
@@ -57,6 +54,7 @@ vim.opt.updatetime = 250
 -- Decrease mapped sequence wait time
 -- Displays which-key popup sooner
 vim.opt.timeoutlen = 300
+vim.opt.ttimeoutlen = 0
 
 -- Configure how new splits should be opened
 vim.opt.splitright = true
@@ -127,7 +125,7 @@ indent_empty_line("A")
 vim.keymap.set(
     "n",
     "<leader>q",
-    vim.diagnostic.setloclist,
+    vim.diagnostic.setqflist,
     { desc = "Open diagnostic [Q]uickfix list" }
 )
 
@@ -207,25 +205,5 @@ require("lazy").setup({
     install = { colorscheme = { "catpuccin" } },
     spec = {
         { import = "custom.plugins" },
-    },
-}, {
-    ui = {
-        -- If you are using a Nerd Font: set icons to an empty table which will use the
-        -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-        icons = vim.g.have_nerd_font and {} or {
-            cmd = "⌘",
-            config = "🛠",
-            event = "📅",
-            ft = "📂",
-            init = "⚙",
-            keys = "🗝",
-            plugin = "🔌",
-            runtime = "💻",
-            require = "🌙",
-            source = "📄",
-            start = "🚀",
-            task = "📌",
-            lazy = "💤 ",
-        },
     },
 })

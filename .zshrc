@@ -15,6 +15,7 @@ prompt pure
 setopt inc_append_history
 # Set up fzf key bindings and fuzzy completion
 source <(fzf --zsh)
+KEYTIMEOUT=1
 
 # if [ -z "$TMUX" ]
 # then

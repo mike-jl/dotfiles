@@ -1,3 +1,13 @@
+local has_words_before = function()
+    if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+        return false
+    end
+    local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+    return col ~= 0
+        and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$")
+            == nil
+end
+
 return { -- Autocompletion
     "hrsh7th/nvim-cmp",
     event = "InsertEnter",
@@ -35,7 +45,7 @@ return { -- Autocompletion
         "hrsh7th/cmp-path",
         "hrsh7th/cmp-nvim-lsp-signature-help",
         "onsails/lspkind.nvim",
-        -- { "zbirenbaum/copilot-cmp", opts = {} },
+        { "zbirenbaum/copilot-cmp", opts = {} },
     },
     config = function()
         -- See `:help cmp`
@@ -69,10 +79,11 @@ return { -- Autocompletion
                     luasnip.lsp_expand(args.body)
                 end,
             },
-            completion = { completeopt = "menu,menuone,noinsert" },
+            completion = { completeopt = "menu,menuone,noselect,noinsert" },
             view = {
                 docs = { auto_open = true },
             },
+            preselect = cmp.PreselectMode.None,
 
             -- For an understanding of why these mappings were
             -- chosen, you will need to read `:help ins-completion`
@@ -91,11 +102,6 @@ return { -- Autocompletion
                 ["<C-d>"] = cmp.mapping.scroll_docs(-4),
                 ["<C-u>"] = cmp.mapping.scroll_docs(4),
 
-                -- Accept ([y]es) the completion.
-                --  This will auto-import if your LSP supports it.
-                --  This will expand snippets if the LSP sent a snippet.
-                ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-
                 -- Manually trigger a completion from nvim-cmp.
                 --  Generally you don't need this, because nvim-cmp will display
                 --  completions whenever it has completion options available.
@@ -107,7 +113,7 @@ return { -- Autocompletion
                             luasnip.expand()
                         else
                             cmp.confirm({
-                                select = true,
+                                select = false,
                             })
                         end
                     else
@@ -116,8 +122,8 @@ return { -- Autocompletion
                 end),
 
                 ["<Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_next_item()
+                    if cmp.visible() and has_words_before() then
+                        cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
                     elseif luasnip.locally_jumpable(1) then
                         luasnip.jump(1)
                     else
@@ -126,8 +132,8 @@ return { -- Autocompletion
                 end, { "i", "s" }),
 
                 ["<S-Tab>"] = cmp.mapping(function(fallback)
-                    if cmp.visible() then
-                        cmp.select_prev_item()
+                    if cmp.visible() and has_words_before() then
+                        cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
                     elseif luasnip.locally_jumpable(-1) then
                         luasnip.jump(-1)
                     else
@@ -149,7 +155,7 @@ return { -- Autocompletion
                 { name = "path" },
                 { name = "nvim_lsp_signature_help" },
                 -- Copilot Source
-                -- { name = "copilot", group_index = 2 },
+                { name = "copilot", group_index = 2 },
             },
         })
     end,
